@@ -20,7 +20,7 @@ mongoose
   )
   .catch((err: Error) => console.log(err));
   
-
+app.use(express.json());
 
 // Run Server
 const PORT = process.env.PORT || 8000;  
