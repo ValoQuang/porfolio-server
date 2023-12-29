@@ -24,7 +24,7 @@ export const signUp = async (req: Request, res: Response) => {
 
 export const signIn = async (req: Request, res) => {
   try {
-    const { username, email, password, role } = req.body;
+    const { email, password } = req.body;
     const userEmail = await Users.findOne({ email });
     if (!userEmail) {
       return res.status(401).json({ error: "Invalid email or password" });
