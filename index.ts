@@ -7,8 +7,10 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
 // Database Connection
+const password: string = process.env.PASSWORD || "";
+const uri = `mongodb+srv://${process.env.USERNAME}:${encodeURIComponent(password)}@cluster0.m7rmckh.mongodb.net/?retryWrites=true&w=majority`;
 mongoose
-  .connect(`mongodb+srv://qtruongngoc95:${encodeURIComponent("Quangpro1995@")}@cluster0.m7rmckh.mongodb.net/?retryWrites=true&w=majority`, {
+  .connect(uri , {
     useNewUrlParser: true,
   })
   .then(() =>
@@ -18,6 +20,8 @@ mongoose
   )
   .catch((err: Error) => console.log(err));
   
+
+
 // Run Server
 const PORT = process.env.PORT || 8000;  
 app.listen(PORT, () => {
