@@ -1,11 +1,6 @@
-/* This all of are helper function */
-exports.toTitleCase = function (str) {
-  return str.replace(/\w\S*/g, function (txt) {
-    return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-  });
-};
+const Users = require("../models/user.model");
 
-exports.validateEmail = function (mail) {
+exports.validateEmail = function (mail: string) {
   if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
     return true;
   } else {
@@ -13,13 +8,3 @@ exports.validateEmail = function (mail) {
   }
 };
 
-exports.emailCheckInDatabase = async function (email) {
-  let user = await userModel.findOne({ email: email });
-  user.exec((err, data) => {
-    if (!data) {
-      return false;
-    } else {
-      return true;
-    }
-  });
-};
