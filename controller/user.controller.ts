@@ -51,11 +51,9 @@ export const signIn = async (req: Request, res: Response) => {
   }
 };
 
-export const forgotPassword = async (req, res) => {
+export const forgotPassword = async (req: Request, res: Response) => {
   try {
     const { email } = req.body;
-    
-    // Check if the user exists
     const existingUser = await Users.findOne({ email });
     if (!existingUser) {
       return res.status(404).json({ error: 'User not found' });
@@ -63,11 +61,10 @@ export const forgotPassword = async (req, res) => {
     
     // Generate a reset token
     const resetToken = crypto.randomBytes(20).toString('hex');
-
     existingUser.resetToken = resetToken;
     existingUser.resetTokenExpiration = Date.now() + 3600000; // Token expires in 1 hour
     await existingUser.save();
- res.status(200).json({ message: 'Password reset token sent' });
+    res.status(200).json({ message: 'Password reset token sent' });
   } catch (error) {
     console.error('Error generating reset token:', error);
     res.status(500).json({ error: 'An error occurred while generating the reset token' });
@@ -85,19 +82,16 @@ export const resetPassword = async (req: Request, res: Response) => {
       return res.status(401).json({ error: 'Invalid or expired reset token' });
     }
 
-// Encrypt and hash the new password
-const salt = await bcrypt.genSalt(10);
-const hashedPassword = await bcrypt.hash(newPassword, salt);
+    // Encrypt and hash the new password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
 
-// Update the user's password and reset token fields
-existingUser.password = hashedPassword;
-existingUser.resetToken = undefined;
-existingUser.resetTokenExpiration = undefined;
-await existingUser.save();
-
-res.status(200).json({ message: 'Password reset successful' });
-
-    const user = 
+    // Update the user's password and reset token fields
+    existingUser.password = hashedPassword;
+    existingUser.resetToken = undefined;
+    existingUser.resetTokenExpiration = undefined;
+    await existingUser.save();
+    res.status(200).json({ message: 'Password reset successful' });
   } catch(error) {
     console.error("Error registering user:", error);
     res
