@@ -7,7 +7,7 @@ const Users = require("../models/user.model");
 
 export const signUp = async (req: Request, res: Response) => {
   try {
-    const { username, email, password, role } = req.body;
+    const { username, email, password } = req.body;
     const existingUser = await Users.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ error: "Email already registered" });
@@ -16,7 +16,7 @@ export const signUp = async (req: Request, res: Response) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
     // create new user
-    const newUser = new Users({ username, email, hashedPassword, role });
+    const newUser = new Users({ username, email, hashedPassword });
     await newUser.save();
     // return 201
     res.status(201).json({ message: 'User registered successfully' });

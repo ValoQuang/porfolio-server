@@ -19,7 +19,7 @@ interface CustomRequest extends Request {
   userId?: string;
 }
 
-const userAuth = async (
+export const authenticateUser = async (
   req: CustomRequest,
   res: Response,
   next: NextFunction
@@ -45,4 +45,3 @@ const userAuth = async (
   }
 };
 
-export default userAuth;

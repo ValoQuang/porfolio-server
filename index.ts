@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
-
+const userRouter = require('./routes/user.route');
 // Database Connection
 const password: string = process.env.PASSWORD || "";
 const uri = `mongodb+srv://${process.env.USERNAME}:${encodeURIComponent(password)}@cluster0.m7rmckh.mongodb.net/?retryWrites=true&w=majority`;
@@ -21,6 +21,9 @@ mongoose
   .catch((err: Error) => console.log(err));
   
 app.use(express.json());
+
+//app router 
+app.use('/', userRouter);
 
 // Run Server
 const PORT = process.env.PORT || 8000;  
