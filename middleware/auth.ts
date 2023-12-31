@@ -4,7 +4,7 @@ const Users = require("../models/user.model");
 
 export class AppError extends Error {
   status: number;
-  constructor(message: string, statusCode: number) {
+  constructor(message: any, statusCode: number) {
     super(message);
     this.status = statusCode;
   }

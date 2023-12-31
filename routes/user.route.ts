@@ -10,7 +10,10 @@ router.post("/signup", userController.signUp);
 
 router.post("/forgot-password", userController.forgotPassword);
 router.post("/reset-password", userController.resetPassword);
-router.post("/user", authenticateUser, userController.allUser);
+
+//Restricted route for admin
+//Admin can: -See list of current user, delete users.
+//router.post("/user", authenticateUser, isAdmin, userController.allUser);
 
 
 module.exports = router;

@@ -6,12 +6,18 @@ const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const userRouter = require('./routes/user.route');
+const { MongoClient, ServerApiVersion } = require('mongodb');
+
 // Database Connection
 const password: string = process.env.PASSWORD || "";
 const uri = `mongodb+srv://${process.env.USERNAME}:${encodeURIComponent(password)}@cluster0.m7rmckh.mongodb.net/?retryWrites=true&w=majority`;
 mongoose
   .connect(uri , {
-    useNewUrlParser: true,
+    serverApi: {
+      version: ServerApiVersion.v1,
+      strict: true,
+      deprecationErrors: true,
+    }
   })
   .then(() =>
     console.log(
