@@ -16,7 +16,8 @@ export const signUp = async (req: Request, res: Response) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
     // create new user
-    const newUser = new Users({ username, email, hashedPassword });
+    console.log(hashedPassword);
+    const newUser = new Users({ username, email, password:hashedPassword });
     await newUser.save();
     // return 201
     res.status(201).json({ message: 'User registered successfully' });
@@ -24,7 +25,7 @@ export const signUp = async (req: Request, res: Response) => {
     console.error("Error registering user:", error);
     res
       .status(500)
-      .json({ error: "An error occurred while registering the user" });
+      .json({ error: "nah" });
   }
 };
 
