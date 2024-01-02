@@ -10,7 +10,7 @@ const { MongoClient, ServerApiVersion } = require('mongodb');
 
 // Database Connection
 const password: string = process.env.PASSWORD || "";
-const uri = `mongodb+srv://${process.env.USERNAME}:${encodeURIComponent(password)}@cluster0.m7rmckh.mongodb.net/?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://${"qtruongngoc95"}:${encodeURIComponent(password)}@cluster0.m7rmckh.mongodb.net/?retryWrites=true&w=majority`;
 mongoose
   .connect(uri , {
     serverApi: {
@@ -27,12 +27,12 @@ mongoose
   .catch((err: Error) => console.log(err));
   
 app.use(express.json());
+app.use(cors());
 
 //app router 
 app.use('/', userRouter);
 
-// Run Server
-const PORT = process.env.PORT || 8000;  
+const PORT = process.env.PORT || 4005;  
 app.listen(PORT, () => {
   console.log("Server is running on ", PORT);
 });
