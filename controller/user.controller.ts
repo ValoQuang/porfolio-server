@@ -19,12 +19,15 @@ export const signUp = async (req: Request, res: Response) => {
     const newUser = new Users({ username, email, password: hashedPassword });
     await newUser.save();
     // return 201
-    return res.status(201).json({ message: "User registered successfully" });
+    return res
+      .status(201)
+      .json({ code: res.statusCode, message: "User registered successfully" });
   } catch (error) {
     console.error("Error registering user:", error);
-    res
-      .status(500)
-      .json({ error: "An error occurred while registering the user" });
+    res.status(500).json({
+      code: res.statusCode,
+      error: "An error occurred while registering the user",
+    });
   }
 };
 
@@ -37,12 +40,19 @@ export const signIn = async (req: Request, res: Response) => {
         .status(404)
         .json({ error: "User not found, please sign up instead" });
     }
-    const isPasswordValid = await existingUser.comparePassword(password);
-    if (!isPasswordValid) {
-      return res.status(401).json({ error: "Invalid email or password" });
+    if (existingUser) {
+      const isPasswordValid = await bcrypt.compare(password, existingUser.password);
+      if (!isPasswordValid) {
+        return res
+          .status(401)
+          .json({ code: res.statusCode, error: "Invalid email or password" });
+      }
     }
     // Generate a JWT token
-    const token = jwt.sign({ userId: existingUser._id, username: existingUser.username }, process.env.JWT_LOGIN_KEY ?? "");
+    const token = jwt.sign(
+      { userId: existingUser._id, username: existingUser.username },
+      process.env.JWT_LOGIN_KEY ?? ""
+    );
     return res.status(200).json({ token });
   } catch (error) {
     console.error("Error registering user:", error);
@@ -63,12 +73,15 @@ export const forgotPassword = async (req: Request, res: Response) => {
     existingUser.resetToken = resetToken;
     existingUser.resetTokenExpiration = Date.now() + 3600000;
     await existingUser.save();
-    res.status(200).json({ message: "Password reset token sent" });
+    res
+      .status(200)
+      .json({ code: res.statusCode, message: "Password reset token sent" });
   } catch (error) {
     console.error("Error generating reset token:", error);
-    res
-      .status(500)
-      .json({ error: "An error occurred while generating the reset token" });
+    res.status(500).json({
+      code: res.statusCode,
+      error: "An error occurred while generating the reset token",
+    });
   }
 };
 
