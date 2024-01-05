@@ -97,7 +97,7 @@ export const getUser = async (req: CustomRequest, res: Response) => {
   try {
     if (req)
       res.json({
-        message: "This is a protected route",
+        email: req.email,
         userId: req.userId,
         username: req.username,
       });

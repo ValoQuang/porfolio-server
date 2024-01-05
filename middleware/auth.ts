@@ -11,6 +11,7 @@ export class AppError extends Error {
 }
 
 export interface CustomRequest extends Request {
+  email: string;
   userId: string;
   username: string;
 }
@@ -39,6 +40,7 @@ export const authenticateUser = async (
       if (user) {
         req.userId = decoded.userId;
         req.username = decoded.username;
+        req.email = decoded.email;
         next();
       } else {
         next(new AppError("Please Login first", 400));
