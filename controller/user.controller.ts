@@ -59,7 +59,9 @@ export const signIn = async (req: Request, res: Response) => {
     // Generate a JWT token
     const token = jwt.sign(
       { userId: existingUser._id, username: existingUser.username },
-      process.env.JWT_LOGIN_KEY ?? ""
+      process.env.JWT_LOGIN_KEY ?? "", {
+        expiresIn: "1h"
+      }
     );
     return res.status(200).json({ token });
   } catch (error) {
@@ -67,6 +69,25 @@ export const signIn = async (req: Request, res: Response) => {
     res.status(500);
   }
 };
+
+export const logOut = async (req: any, res: Response) => {
+  try {
+    if (req.session) {
+      console.log(req.session);
+      await req.session.destroy();
+      res.clearCookie('user');
+      res.redirect('/');
+    }
+    else {
+      let err:any = new Error('You are not logged in!');
+      err.status = 403;
+    }
+  } catch (error) {
+    console.error("Error with log out", error);
+    res.status(500);
+  }
+}
+  
 
 export const forgotPassword = async (req: Request, res: Response) => {
   try {

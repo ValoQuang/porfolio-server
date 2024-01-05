@@ -12,6 +12,7 @@ router.post("/forgot-password", userController.forgotPassword);
 router.post("/reset-password", userController.resetPassword);
 
 router.get("/authenticated", authenticateUser, userController.getUser);
+router.get("/logout", userController.logOut)
 //Restricted route for admin
 //Admin can: -See list of current user, delete users.
 //router.post("/user", authenticateUser, isAdmin, userController.allUser);
