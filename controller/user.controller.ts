@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import { Request, Response } from "express";
+import { CustomRequest } from "../middleware/auth";
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
 
@@ -16,7 +17,11 @@ export const signUp = async (req: Request, res: Response) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
     // create new user
-    const newUser = new Users({ username, email, password: hashedPassword });
+    const newUser = new Users({
+      username: username,
+      email: email,
+      password: hashedPassword,
+    });
     await newUser.save();
     // return 201
     return res
@@ -41,7 +46,10 @@ export const signIn = async (req: Request, res: Response) => {
         .json({ error: "User not found, please sign up instead" });
     }
     if (existingUser) {
-      const isPasswordValid = await bcrypt.compare(password, existingUser.password);
+      const isPasswordValid = await bcrypt.compare(
+        password,
+        existingUser.password
+      );
       if (!isPasswordValid) {
         return res
           .status(401)
@@ -81,6 +89,23 @@ export const forgotPassword = async (req: Request, res: Response) => {
     res.status(500).json({
       code: res.statusCode,
       error: "An error occurred while generating the reset token",
+    });
+  }
+};
+
+export const getUser = async (req: CustomRequest, res: Response) => {
+  try {
+    if (req)
+      res.json({
+        message: "This is a protected route",
+        userId: req.userId,
+        username: req.username,
+      });
+  } catch (error) {
+    console.error("Error token:", error);
+    res.status(500).json({
+      code: res.statusCode,
+      error: "An error occurred while logging in",
     });
   }
 };
